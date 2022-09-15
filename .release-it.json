@@ -7,5 +7,10 @@
     },
     "hooks": {
         "after:bump": "npx auto-changelog -p"
+    },
+    "plugins": {
+        "@release-it/bumper": {
+            "out": "composer.json"
+        }
     }
 }
