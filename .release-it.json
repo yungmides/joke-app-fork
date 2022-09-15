@@ -10,8 +10,8 @@
     },
     "plugins": {
         "@release-it/bumper": {
-            "in": "version.json",
-            "out": "version.json"
+            "in": "version.yml",
+            "out": "version.yml"
         }
     }
 }
