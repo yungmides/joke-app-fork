@@ -12,6 +12,10 @@
         "@release-it/bumper": {
             "in": "version.yml",
             "out": "version.yml"
+        },
+        "@release-it/conventional-changelog": {
+            "preset": "angular",
+            "infile": "CHANGELOG-bis.md"
         }
     }
 }
