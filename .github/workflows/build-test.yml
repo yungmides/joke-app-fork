@@ -31,4 +31,4 @@ jobs:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "joke-app-iw2" #Must be unique in Heroku
           heroku_email: "mohammadamine.banaei@protonmail.com"
-
+          procfile: "web: JOKE_URL=${{secrets.JOKE_URL}} npm run start:prod"
