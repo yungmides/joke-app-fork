@@ -11,9 +11,8 @@ jobs:
       - checkout
       - node/install:
           node-version: '16.13'
-      - node/run:
-          npm-run: build
-      - node/test
+      - run: npm run build
+      - run: npm test
 
 workflows:
   buildtest:
