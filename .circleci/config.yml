@@ -11,6 +11,11 @@ jobs:
       - checkout
       - node/install:
           node-version: '16.13'
+
+      - node/install-packages:
+          cache-path: ~/project/node_modules
+          override-ci-command: npm install
+
       - run: npm run build
       - run: npm test
 
