@@ -46,7 +46,6 @@ workflows:
       - docker/publish:
           image: joke-api
           tag: cci
-          registry: $DOCKER_LOGIN
           requires:
             - "node/test"
             - "node/run"
