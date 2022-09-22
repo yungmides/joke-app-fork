@@ -5,7 +5,7 @@ orbs:
   heroku: circleci/heroku@1.2.6
 
 workflows:
-  build-test:
+  build-test-deploy:
     jobs:
       - node/run:
           npm-run: build
@@ -20,8 +20,6 @@ workflows:
               only:
                 - circleci
 
-  deploy:
-    jobs:
       - heroku/deploy-via-git:
           requires:
             - node/run
