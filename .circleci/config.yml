@@ -1,14 +1,19 @@
 version: 2.1
 
+orbs:
+  node: circleci/node@5.0.2
+
 jobs:
   build-test:
     docker:
-      - image: cimg/node:16.17.0
+      - image: cimg/base:stable
     steps:
       - checkout
-      - run: npm ci
-      - run: npm run build
-      - run: npm test
+      - node/install:
+          node-version: '16.13'
+      - node/run:
+          npm-run: build
+      - node/test
 
 workflows:
   buildtest:
