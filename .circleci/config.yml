@@ -12,9 +12,8 @@ workflows:
             branches:
               only:
                 - circleci
-                
+
       - node/test:
-          test-results-for: jest
           filters:
             branches:
               only:
