@@ -34,7 +34,7 @@ workflows:
       - docker/publish:
           image: mohammaddocker/joke-api:latest
           docker-username: mohammaddocker
-          docker-password: $DOCKER_PASSWORD
+          docker-password: DOCKER_PASSWORD
           requires:
             - node/run
             - node/test
