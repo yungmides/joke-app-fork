@@ -4,24 +4,21 @@ orbs:
   node: circleci/node@5.0.2
   heroku: circleci/heroku@1.2.6
 
-# jobs:
-#   build-test:
-#     docker:
-#       - image: cimg/base:stable
-#     steps:
-#       - checkout
-#       - node/install:
-#           node-version: '16.13'
+jobs:
+  deploy-heroku:
+    executor: heroku/default
 
-#       - node/install-packages:
-#           cache-path: ~/project/node_modules
-#           override-ci-command: npm install
+    steps:
+      - checkout
 
-#       - run: npm run build
-#       - run: npm test
+      - heroku/install
+
+      - heroku/deploy-via-git:
+          app-name: "joke-api-iw3"
+
 
 workflows:
-  buildtest:
+  deploy:
     jobs:
       - node/test:
           filters:
@@ -36,8 +33,7 @@ workflows:
               only:
                 - circleci
 
-      - heroku/deploy-via-git:
-          app-name: "joke-api-iw3"
+      - deploy-heroku:
           requires:
             - "node/test"
             - "node/run"
