@@ -3,6 +3,7 @@ version: 2.1
 orbs:
   node: circleci/node@5.0.2
   heroku: circleci/heroku@1.2.6
+  docker: circleci/docker@2.1.3
 
 workflows:
   build-test-deploy:
@@ -29,3 +30,16 @@ workflows:
             branches:
               only:
                 - circleci
+
+      - docker/publish:
+          image: mohammaddocker/joke-api:latest
+          docker-username: mohammaddocker
+          requires:
+            - node/run
+            - node/test
+          filters:
+            branches:
+              only:
+                - circleci
+
+  
