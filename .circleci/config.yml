@@ -3,22 +3,7 @@ version: 2.1
 orbs:
   node: circleci/node@5.0.2
   heroku: circleci/heroku@1.2.6
-
-jobs:
-  docker:
-    machine:
-      image: ubuntu-2204:2022.04.2
-    steps:
-      - checkout
-      # with credentials stored in the UI
-      - run: |
-          echo "$DOCKER_PASSWORD" | docker login --username $DOCKER_LOGIN --password-stdin
-
-      # build the application image
-      - run: docker build -t $DOCKER_LOGIN/joke-api:$CIRCLE_BRANCH .
-
-      # deploy the image
-      - run: docker push $DOCKER_LOGIN/joke-api:$CIRCLE_BRANCH
+  docker: circleci/docker@2.1.3
 
 workflows:
   build-test-deploy:
@@ -46,7 +31,8 @@ workflows:
               only:
                 - circleci
 
-      - docker:
+      - docker/publish:
+          tag: mohammaddocker/joke-api:latest
           filters:
             branches:
               only:
