@@ -17,6 +17,20 @@ jobs:
       - heroku/deploy-via-git:
           app-name: "joke-api-iw3"
 
+  docker-push:
+    machine:
+      image: ubuntu-2204:2022.04.2
+    steps:
+      - checkout
+      # with credentials stored in the UI
+      - run: |
+          echo "$DOCKER_PASSWORD" | docker login --username $DOCKER_LOGIN --password-stdin
+
+      # build the application image
+      - run: docker build -t $DOCKER_LOGIN/joke-app:$CIRCLE_BRANCH .
+
+      # deploy the image
+      - run: docker push $DOCKER_LOGIN/joke-app:$CIRCLE_BRANCH
 
 workflows:
   deploy:
@@ -25,7 +39,7 @@ workflows:
           filters:
             branches:
               only:
-              - circleci
+                - circleci
 
       - node/run:
           npm-run: build
@@ -43,9 +57,7 @@ workflows:
               only:
                 - circleci
 
-      - docker/publish:
-          image: joke-api
-          tag: cci
+      - docker-push:
           requires:
             - "node/test"
             - "node/run"
