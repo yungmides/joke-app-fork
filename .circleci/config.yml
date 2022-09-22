@@ -32,7 +32,7 @@ workflows:
                 - circleci
 
       - docker/publish:
-          tag: mohammaddocker/joke-api:latest
+          image: mohammaddocker/joke-api:latest
           filters:
             branches:
               only:
