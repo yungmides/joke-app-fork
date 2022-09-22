@@ -3,31 +3,43 @@ version: 2.1
 orbs:
   node: circleci/node@5.0.2
   heroku: circleci/heroku@1.2.6
+  docker: circleci/docker@2.1.3
 
-# jobs:
-#   build-test:
-#     docker:
-#       - image: cimg/base:stable
-#     steps:
-#       - checkout
-#       - node/install:
-#           node-version: '16.13'
+jobs:
+  deploy-heroku:
+    executor: heroku/default
 
-#       - node/install-packages:
-#           cache-path: ~/project/node_modules
-#           override-ci-command: npm install
+    steps:
+      - checkout
 
-#       - run: npm run build
-#       - run: npm test
+      - heroku/install
+
+      - heroku/deploy-via-git:
+          app-name: "joke-api-circle-ci"
+
+  docker-push:
+    machine:
+      image: ubuntu-2204:2022.04.2
+    steps:
+      - checkout
+      # with credentials stored in the UI
+      - run: |
+          echo "$DOCKER_PASSWORD" | docker login --username $DOCKER_LOGIN --password-stdin
+
+      # build the application image
+      - run: docker build -t $DOCKER_LOGIN/joke-app:$CIRCLE_BRANCH .
+
+      # deploy the image
+      - run: docker push $DOCKER_LOGIN/joke-app:$CIRCLE_BRANCH
 
 workflows:
-  buildtest:
+  deploy:
     jobs:
       - node/test:
           filters:
             branches:
               only:
-              - circleci
+                - circleci
 
       - node/run:
           npm-run: build
@@ -36,8 +48,16 @@ workflows:
               only:
                 - circleci
 
-      - heroku/deploy-via-git:
-          app-name: "joke-app-circle-ci"
+      - deploy-heroku:
+          requires:
+            - "node/test"
+            - "node/run"
+          filters:
+            branches:
+              only:
+                - circleci
+
+      - docker-push:
           requires:
             - "node/test"
             - "node/run"
